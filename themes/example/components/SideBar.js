@@ -2,9 +2,10 @@ import Live2D from '@/components/Live2D'
 import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
 import dynamic from 'next/dynamic'
-import Link from 'next/link'
+import SmartLink from '@/components/SmartLink'
 import CONFIG from '../config'
 import Announcement from './Announcement'
+import Catalog from './Catalog'
 const ExampleRecentComments = dynamic(
   () => import('./RecentCommentListForExample')
 )
@@ -32,6 +33,16 @@ export const SideBar = props => {
 
   return (
     <>
+      {/* 目录 */}
+      {post?.toc && post?.toc.length > 2 && (
+        <aside className='w-full rounded shadow overflow-hidden mb-6 pb-4'>
+          <h3 className='text-sm bg-gray-100 text-gray-700 dark:bg-hexo-black-gray dark:text-gray-200 py-3 px-4 dark:border-hexo-black-gray border-b'>
+            {locale.COMMON.TABLE_OF_CONTENTS}
+          </h3>
+          <Catalog toc={post?.toc} />
+        </aside>
+      )}
+
       {/* 分类 */}
       <aside className='w-full rounded shadow overflow-hidden mb-6'>
         <h3 className='text-sm bg-gray-100 text-gray-700 dark:bg-hexo-black-gray dark:text-gray-200 py-3 px-4 dark:border-hexo-black-gray border-b'>
@@ -42,7 +53,7 @@ export const SideBar = props => {
           <ul className='list-reset leading-normal'>
             {categoryOptions?.map(category => {
               return (
-                <Link
+                <SmartLink
                   key={category.name}
                   href={`/category/${category.name}`}
                   passHref
@@ -55,7 +66,7 @@ export const SideBar = props => {
                       {category.name}({category.count})
                     </a>
                   </li>
-                </Link>
+                </SmartLink>
               )
             })}
           </ul>
@@ -72,7 +83,7 @@ export const SideBar = props => {
           <ul className='list-reset leading-normal'>
             {latestPosts?.map(p => {
               return (
-                <Link key={p.id} href={`/${p.slug}`} passHref legacyBehavior>
+                <SmartLink key={p.id} href={`/${p.slug}`} passHref legacyBehavior>
                   <li>
                     {' '}
                     <a
@@ -81,7 +92,7 @@ export const SideBar = props => {
                       {p.title}
                     </a>
                   </li>
-                </Link>
+                </SmartLink>
               )
             })}
           </ul>
